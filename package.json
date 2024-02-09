@@ -1,14 +1,18 @@
 {
-  "name": "hunter",
+  "name": "nameday",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun --hot src/index.ts",
+    "build": "bun build src/index.ts",
+    "start": "bun src/index.ts",
+    "test": "bun test"
   },
   "dependencies": {
+    "@elysiajs/swagger": "^0.8.5",
     "elysia": "latest"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "latest",
     "bun-types": "latest"
   },
   "module": "src/index.js"

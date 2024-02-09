@@ -1,0 +1,30 @@
+name: Fly deploy (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The tag to publish
+        required: true
+jobs:
+  publish:
+    name: Publish release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: refs/tags/${{ github.event.inputs.tag }}
+      - name: Publish release
+        uses: ghalactic/github-release-from-tag@v5
+  deploy:
+    name: Deploy app to fly
+    runs-on: ubuntu-latest
+    concurrency: deploy-group
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

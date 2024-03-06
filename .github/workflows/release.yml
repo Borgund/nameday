@@ -1,3 +1,4 @@
+# Docs: https://github.com/marketplace/actions/github-release-from-tag
 name: Fly deploy (manual)
 on:
   workflow_dispatch:

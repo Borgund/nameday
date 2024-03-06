@@ -7,8 +7,10 @@ import {
   getNamedaysForMonth,
   listNamedays,
 } from "./services/namedayService";
+import { cors } from "@elysiajs/cors";
 
 const app = new Elysia().use(swagger());
+app.use(cors());
 
 app.get("/", () => listNamedays());
 

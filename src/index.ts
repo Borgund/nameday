@@ -6,6 +6,7 @@ import {
   getNamedaysForDate,
   getNamedaysForMonth,
   listNamedays,
+  listNamedaysByDate,
 } from "./services/namedayService";
 import { cors } from "@elysiajs/cors";
 
@@ -14,13 +15,24 @@ app.use(cors());
 
 app.get("/", () => listNamedays());
 
-app.get("/names", ({ query: { name } }) => getNamedayForName(name), {
-  query: t.Object({
-    name: t.String(),
-  }),
-});
+app.get(
+  "/names",
+  ({ query: { name } }) => {
+    if (!name) {
+      return listNamedays();
+    }
+    return getNamedayForName(name);
+  },
+  {
+    query: t.Object({
+      name: t.Optional(t.String()),
+    }),
+  }
+);
 
 app.get("/today", () => getNamedayToday());
+
+app.get("/dates", () => listNamedaysByDate());
 
 app.get("/dates/:month", ({ params: { month } }) =>
   getNamedaysForMonth(parseInt(month))
@@ -41,12 +53,15 @@ app.get("/dates/:month/:day", ({ params: { month, day } }) =>
     }),
   };
 
-app.onError(({ code }) => {
-  if (code === "NOT_FOUND") return "Route not found :(";
+app.onError((e) => {
+  console.log(e);
+  if (e.code === "NOT_FOUND") return "Route not found :(";
   else {
     return "An unexpected error occured";
   }
 });
+
+app.onError(console.error);
 
 app.listen(3000);
 

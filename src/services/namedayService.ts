@@ -8,6 +8,13 @@ export const listNamedays = () => {
   });
 };
 
+export const listNamedaysByDate = () => {
+  return new Response(JSON.stringify(names, null, 2), {
+    headers: { "Content-Type": "application/json" },
+    status: 200,
+  });
+};
+
 export const getNamedayForName = (name: string) => {
   const nameday = namesSorted.filter(
     (item) => item.name.toLowerCase() === name.toLowerCase()

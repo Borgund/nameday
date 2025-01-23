@@ -43,3 +43,7 @@ package-lock.json
 
 ## build output
 dist/
+
+
+#db
+db.sqlite

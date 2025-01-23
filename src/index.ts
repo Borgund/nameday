@@ -74,6 +74,11 @@ app.get("/dates/:month/:day", ({ params: { month, day } }) =>
     }),
   };
 
+app.get(
+  "/health",
+  () => new Response(`OK ${process.env.npm_package_version}`, { status: 200 })
+);
+
 app.onError((e) => {
   console.log(e);
   if (e.code === "NOT_FOUND") return "Route not found :(";
@@ -84,6 +89,8 @@ app.onError((e) => {
 
 const data = db.select().from(schema.namedays).all();
 console.log(`${data.length > 0 ? "✅" : "❌"} Data in database:`, data.length);
+
+console.log(`📆 Starting Nameday™: v${process.env.npm_package_version}`);
 
 app.onError(console.error);
 

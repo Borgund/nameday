@@ -4,5 +4,4 @@ export const namedays = sqliteTable("namedays", {
   name: text("name").primaryKey(),
   month: integer("month").notNull(),
   day: integer("day").notNull(),
-  test: text("test"),
 });

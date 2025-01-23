@@ -1,6 +1,6 @@
 {
   "name": "nameday",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "dev": "bun --hot src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target=bun ",

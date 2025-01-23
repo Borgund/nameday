@@ -1,14 +1,17 @@
+import * as schema from "./data/schema";
 import { Elysia, t } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import {
   getNamedayForName,
   getNamedayToday,
   getNamedaysForDate,
+  getNamedaysForDateRange,
   getNamedaysForMonth,
   listNamedays,
   listNamedaysByDate,
 } from "./services/namedayService";
 import { cors } from "@elysiajs/cors";
+import { db } from "./data/db";
 
 const app = new Elysia().use(swagger());
 app.use(cors());
@@ -33,6 +36,24 @@ app.get(
 app.get("/today", () => getNamedayToday());
 
 app.get("/dates", () => listNamedaysByDate());
+
+app.get(
+  "/dates",
+  ({ query: { dayStart, dayEnd, monthStart, monthEnd } }) => {
+    return getNamedaysForDateRange(
+      { day: dayStart, month: monthStart },
+      { day: dayEnd, month: monthEnd }
+    );
+  },
+  {
+    query: t.Object({
+      dayStart: t.Number(),
+      dayEnd: t.Number(),
+      monthStart: t.Number(),
+      monthEnd: t.Number(),
+    }),
+  }
+);
 
 app.get("/dates/:month", ({ params: { month } }) =>
   getNamedaysForMonth(parseInt(month))
@@ -60,6 +81,9 @@ app.onError((e) => {
     return "An unexpected error occured";
   }
 });
+
+const data = db.select().from(schema.namedays).all();
+console.log(`${data.length > 0 ? "✅" : "❌"} Data in database:`, data.length);
 
 app.onError(console.error);
 

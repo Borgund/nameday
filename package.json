@@ -3,18 +3,27 @@
   "version": "1.4.0",
   "scripts": {
     "dev": "bun --hot src/index.ts",
-    "build": "bun build src/index.ts --outdir dist",
+    "build": "bun build src/index.ts --outdir dist --target=bun ",
+    "prestart": " bun run db:init",
     "start": "bun src/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun run src/data/migration.ts",
+    "db:seed": "bun run src/data/seed.ts",
+    "db:DELETE": "bun run src/data/deleteALL.ts",
+    "db:init": "bun run db:generate && bun run db:migrate && bun run db:seed"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.2.0",
     "@elysiajs/swagger": "^1.2.0",
+    "bun": "^1.2.0",
+    "drizzle-orm": "^0.38.4",
     "elysia": "latest"
   },
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "drizzle-kit": "^0.30.2"
   },
   "module": "src/index.js"
 }

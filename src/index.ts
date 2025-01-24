@@ -4,6 +4,7 @@ import { swagger } from "@elysiajs/swagger";
 import {
   getNamedayForName,
   getNamedayToday,
+  getNamedaysForCommingWeek,
   getNamedaysForDate,
   getNamedaysForDateRange,
   getNamedaysForMonth,
@@ -34,6 +35,8 @@ app.get(
 );
 
 app.get("/today", () => getNamedayToday());
+
+app.get("/week", () => getNamedaysForCommingWeek());
 
 app.get("/dates", () => listNamedaysByDate());
 

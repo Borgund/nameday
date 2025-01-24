@@ -107,6 +107,33 @@ export const getNamedaysForDateRange = (
   });
 };
 
+export const getNamedaysForCommingWeek = () => {
+  const startDate = new Date();
+  const start = { day: startDate.getDate(), month: startDate.getMonth() + 1 };
+  const endDate = new Date(startDate.setDate(startDate.getDate() + 7));
+  const end = { day: endDate.getDate(), month: endDate.getMonth() + 1 };
+  if (!(_validateRangeInput(start) && _validateRangeInput(end))) {
+    return new Response("Invalid date format", { status: 400 });
+  }
+  const result = db
+    .select()
+    .from(namedays)
+    .where(
+      and(
+        and(gte(namedays.month, start.month), gte(namedays.day, start.day)),
+        and(lte(namedays.month, end.month), lte(namedays.day, end.day))
+      )
+    )
+    .all();
+  if (!result.length) {
+    return new Response("No names found for given date range", { status: 404 });
+  }
+  return new Response(JSON.stringify(result.flat()), {
+    headers: { "Content-Type": "application/json" },
+    status: 200,
+  });
+};
+
 function _getNamedaysForDate(month: number, day: number) {
   return db
     .select()
